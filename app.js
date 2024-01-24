@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb' }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb" }));
 const cors = require("cors");
 app.use(cors());
 const bcrypt = require("bcryptjs");
@@ -13,9 +13,10 @@ const JWT_SECRET = "hvme12#tyu7834?[]powqrdgty";
 //Below is the steps to connect to the MongoDB Database
 const mongoUrl = "mongodb://127.0.0.1:27017/hostleRegister";
 
-mongoose.connect(mongoUrl, { 
-  useNewUrlParser: true,
-})
+mongoose
+  .connect(mongoUrl, {
+    useNewUrlParser: true,
+  })
   .then(() => {
     console.log("Connected to database");
   })
@@ -24,6 +25,17 @@ mongoose.connect(mongoUrl, {
 app.listen(5000, () => {
   console.log("Server Started");
 });
+
+const cors = require("cors");
+// Allow all origins
+app.use(cors());
+// Allow specific origin(s)
+app.use(
+  cors({
+    origin:
+      "https://hostel-management-frontend-feghdo5nr-amankr025s-projects.vercel.app/",
+  })
+);
 
 require("./schema");
 const User = mongoose.model("UserInfo");
@@ -75,12 +87,9 @@ require("./schema");
 const pro = mongoose.model("profile");
 
 app.post("/updateform", async (req, res) => {
-
-  const reasult = await pro.create(
-    req.body
-  )
-  res.send({ status: "ok" })
-})
+  const reasult = await pro.create(req.body);
+  res.send({ status: "ok" });
+});
 
 require("./schema");
 const Admin = mongoose.model("adminData");
@@ -129,30 +138,18 @@ app.post("/admin-user", async (req, res) => {
 });
 app.get("/getprofile/:roll", async (req, res) => {
   const rollnum = req.params.roll;
-  const user = await pro.findOne(
-    {
-      "$or": [
-        { "rollnumber": { $regex: rollnum } }
-      ]
-    }
-  );
+  const user = await pro.findOne({
+    $or: [{ rollnumber: { $regex: rollnum } }],
+  });
 
-  if (user)
-    res.send(user);
-  else
-    res.send("not");
+  if (user) res.send(user);
+  else res.send("not");
 });
 app.get("/getname/:roll", async (req, res) => {
   const rollnum = req.params.roll;
-  const profilename = await User.findOne(
-    {
-      "$or": [
-        { "rollNumber": { $regex: rollnum } }
-      ]
-    }
-  );
-  if (profilename)
-    res.send(profilename);
-  else
-    res.send("not");
+  const profilename = await User.findOne({
+    $or: [{ rollNumber: { $regex: rollnum } }],
+  });
+  if (profilename) res.send(profilename);
+  else res.send("not");
 });
