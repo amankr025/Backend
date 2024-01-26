@@ -26,7 +26,7 @@ app.listen(5000, () => {
   console.log("Server Started");
 });
 
-const cors = require("cors");
+// const cors = require("cors");
 // Allow all origins
 // app.use(cors());
 // // Allow specific origin(s)
