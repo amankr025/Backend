@@ -28,14 +28,14 @@ app.listen(5000, () => {
 
 const cors = require("cors");
 // Allow all origins
-app.use(cors());
-// Allow specific origin(s)
-app.use(
-  cors({
-    origin:
-      "https://hostel-management-frontend-feghdo5nr-amankr025s-projects.vercel.app/",
-  })
-);
+// app.use(cors());
+// // Allow specific origin(s)
+// app.use(
+//   cors({
+//     origin:
+//       "https://hostel-management-frontend-feghdo5nr-amankr025s-projects.vercel.app/",
+//   })
+// );
 
 require("./schema");
 const User = mongoose.model("UserInfo");
@@ -62,6 +62,23 @@ app.post("/register", async (req, res) => {
     res.send({ status: "error" });
   }
 });
+
+// Your code
+if (process.env.NODE_ENV === "production") {
+  const path = require("path");
+  app.use(express.static(path.resolve(__dirname, "client", "build")));
+  app.get("*", (req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, "client", "build", "index.html"),
+      function (err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      }
+    );
+  });
+}
+// Your code
 
 // To Login in the websites
 app.post("/login-user", async (req, res) => {
